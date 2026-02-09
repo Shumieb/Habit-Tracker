@@ -7,7 +7,7 @@ function Layout() {
     return (
         <div className='mx-auto flex flex-col justify-between align-center'>
             <NavBar />
-            <div className='h-100'>
+            <div className='min-h-[80vh]'>
                 <Outlet />
             </div>
             <Footer />
