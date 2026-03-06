@@ -2,15 +2,24 @@ import { useEffect, useState } from "react"
 import DayDateCard from "../components/dayDateCard"
 import { setDatesToDisplay } from "../helpers/helperFunctions"
 import HabitHomeCard from "../components/habitHomeCard"
-import { mockCompletedHabits, mockHabits } from "../mockData/mockData"
+import { mockHabitsHistory } from "../mockData/mockData"
+
+interface habitType{
+    id:string,
+    date:number,
+    day:number,
+    month:number,
+    year:number,
+    habitId:string,
+    completed:boolean 
+}
 
 function GoalsPage() {
 
   // variables
   const [userName, setUserName] = useState("User Name")
-  const [habits, setHabits] = useState(mockHabits)
-  const [completedHabits, setCompletedHabits] = useState(mockCompletedHabits)
-  const [todayCompleted, setTodayCompleted] = useState<string[]>([])
+  const [dailyHabits, setDailyHabits] = useState<habitType[]>()
+  
 
   const [daysToDisplay, setDaysToDisplay] = useState([
         {day: "Sun", date:"2"},
@@ -22,7 +31,6 @@ function GoalsPage() {
         {day: "Sat", date:"2"}
       ])  
 
-
   useEffect(()=>{
     
     // set dates to display
@@ -30,19 +38,20 @@ function GoalsPage() {
     let displayDays = setDatesToDisplay(today.getDay(), today.getDate())
     displayDays && setDaysToDisplay(displayDays)
 
+    // get todays habit only
+    let todayHabits = mockHabitsHistory.filter(item => item.date == today.getDate() && item.day == today.getDay() && item.month == (today.getMonth() + 1) && item.year == today.getFullYear())
+    setDailyHabits(todayHabits)
   },[])
 
-  useEffect(()=>{
-    
-    const today = new Date()    
-    // find today's completed habits
-    let todayCompletedHabits = completedHabits.find(item =>
-       item.date == today.getDate() && item.month == (today.getMonth() + 1) && item.year == today.getFullYear()
-    )
 
-    todayCompletedHabits && setTodayCompleted(todayCompletedHabits.habits)
+  const handleComplete = (id:string) =>{
+    // find and update habit complete status
+    const copyDailyHabits: habitType[]= [...(dailyHabits as habitType[])]
+    let cHabit = copyDailyHabits.find(item => item.id == id)
+    if(cHabit) cHabit.completed = !cHabit.completed
+    setDailyHabits(copyDailyHabits)
+  } 
 
-  },[completedHabits])
 
   return (
     <section className="w-[90%] mx-auto py-2">
@@ -62,9 +71,8 @@ function GoalsPage() {
 
       {/* habits */}
       <div className="px-2 py-2">
-        { habits && habits.map((habit)=>{
-          let completed = todayCompleted.includes(habit.id)
-          return <HabitHomeCard habit={habit} completed={completed} key={habit.id}/>  
+        { dailyHabits && dailyHabits.map((habit)=>{            
+            return <HabitHomeCard habit={habit} handleComplete={handleComplete} key={habit.id}/> 
           }) 
         } 
       </div>
