@@ -1,12 +1,16 @@
 import { useEffect, useState } from "react"
 import DayDateCard from "../components/dayDateCard"
 import { setDatesToDisplay } from "../helpers/helperFunctions"
+import HabitHomeCard from "../components/habitHomeCard"
+import { mockCompletedHabits, mockHabits } from "../mockData/mockData"
 
 function GoalsPage() {
 
   // variables
   const [userName, setUserName] = useState("User Name")
-
+  const [habits, setHabits] = useState(mockHabits)
+  const [completedHabits, setCompletedHabits] = useState(mockCompletedHabits)
+  const [todayCompleted, setTodayCompleted] = useState<string[]>([])
 
   const [daysToDisplay, setDaysToDisplay] = useState([
         {day: "Sun", date:"2"},
@@ -19,7 +23,6 @@ function GoalsPage() {
       ])  
 
 
-  // set date and day
   useEffect(()=>{
     
     // set dates to display
@@ -27,8 +30,19 @@ function GoalsPage() {
     let displayDays = setDatesToDisplay(today.getDay(), today.getDate())
     displayDays && setDaysToDisplay(displayDays)
 
-
   },[])
+
+  useEffect(()=>{
+    
+    const today = new Date()    
+    // find today's completed habits
+    let todayCompletedHabits = completedHabits.find(item =>
+       item.date == today.getDate() && item.month == (today.getMonth() + 1) && item.year == today.getFullYear()
+    )
+
+    todayCompletedHabits && setTodayCompleted(todayCompletedHabits.habits)
+
+  },[completedHabits])
 
   return (
     <section className="w-[90%] mx-auto py-2">
@@ -48,13 +62,11 @@ function GoalsPage() {
 
       {/* habits */}
       <div className="px-2 py-2">
-        <div className="flex justify-between align-center border rounded py-2 px-2">
-          <div className="flex justify-start align-center">
-            <p>icon</p>
-            <p>Walk 2 miles</p>
-          </div>          
-          <button>icon</button>
-        </div>        
+        { habits && habits.map((habit)=>{
+          let completed = todayCompleted.includes(habit.id)
+          return <HabitHomeCard habit={habit} completed={completed} key={habit.id}/>  
+          }) 
+        } 
       </div>
 
 
