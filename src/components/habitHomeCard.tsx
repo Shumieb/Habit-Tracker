@@ -22,7 +22,6 @@ interface habitType{
     frequency: string,
     day: string | undefined,
     date: string | undefined,
-    streak: number, 
 }
 
 
