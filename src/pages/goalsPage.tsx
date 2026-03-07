@@ -8,6 +8,7 @@ import type {
   habitType,
   selectedDayType,
 } from "../helpers/entityTypes";
+import useCategoriesStore from "../stores/categoriesStore";
 
 function GoalsPage() {
   // variables
@@ -37,6 +38,9 @@ function GoalsPage() {
     month: "long",
     year: "numeric",
   });
+
+  // store
+  const categories = useCategoriesStore.getState().initializeCategories();
 
   // runs when the component first mounts
   useEffect(() => {

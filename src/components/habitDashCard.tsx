@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
 import type { habitOriginType } from "../helpers/entityTypes";
 import { FaPenToSquare, FaTrashCan } from "react-icons/fa6";
-import { categories, mockFrequency } from "../mockData/mockData";
+import { mockFrequency } from "../mockData/mockData";
 import { setDay } from "../helpers/helperFunctions";
 import { Link } from "react-router";
 import { catIconImgs, freqIconImgs } from "../helpers/iconsBank";
+import useCategoriesStore from "../stores/categoriesStore";
 
 interface PropTypes {
   habit: habitOriginType;
@@ -13,6 +14,8 @@ interface PropTypes {
 function HabitDashCard({ habit }: PropTypes) {
   // variables
   const [dayOfWeek, setDayOfWeek] = useState("");
+  const [catIcon, setCatIcon] = useState<React.ReactNode>();
+  const [catName, setCatName] = useState<string>();
 
   // run when component first renders
   useEffect(() => {
@@ -20,6 +23,20 @@ function HabitDashCard({ habit }: PropTypes) {
       let weekDay = setDay(Number(habit.frequency));
       weekDay && setDayOfWeek(weekDay);
     } else [setDayOfWeek("")];
+
+    // set category name
+    let cat = useCategoriesStore.getState().getCategoryById(habit.category);
+    cat && setCatName(cat.name);
+
+    //set category icon
+    if (cat) {
+      // set category icon
+      catIconImgs.map((catIcon) => {
+        if (catIcon.name == cat.icon) {
+          setCatIcon(catIcon.icon);
+        }
+      });
+    }
   }, []);
 
   return (
@@ -34,34 +51,14 @@ function HabitDashCard({ habit }: PropTypes) {
         </p>
 
         {/* display category */}
-        {categories.map((cat) => {
-          if (cat.id == habit.category) {
-            return (
-              <div className="flex justify-center align-center" key={cat.id}>
-                <div className="text-lg">
-                  {catIconImgs.map((catIcon) => {
-                    if (catIcon.name == cat.icon) {
-                      return (
-                        <p
-                          className="px-1 pt-2 text-gray-600"
-                          key={catIcon.name}
-                        >
-                          {catIcon.icon}
-                        </p>
-                      );
-                    }
-                  })}
-                </div>
-                <p
-                  className="text-lg px-1 text-gray-600 pt-0.5 italic"
-                  key={cat.id}
-                >
-                  Category - {cat.name}
-                </p>
-              </div>
-            );
-          }
-        })}
+        <div className="flex justify-center align-center">
+          <div className="text-lg">
+            <p className="px-1 pt-2 text-gray-600">{catIcon}</p>
+          </div>
+          <p className="text-lg px-1 text-gray-600 pt-0.5 italic">
+            Category - {catName}
+          </p>
+        </div>
 
         {/* display frequency */}
         {mockFrequency.map((freq) => {

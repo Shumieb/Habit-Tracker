@@ -1,16 +1,9 @@
-import {
-  FaBaseball,
-  FaRegCircle,
-  FaRegCircleCheck,
-  FaBrain,
-  FaBusinessTime,
-  FaBookOpen,
-  FaBuildingColumns,
-  FaHouseChimney,
-} from "react-icons/fa6";
-import { categories, mockHabits } from "../mockData/mockData";
+import { FaRegCircle, FaRegCircleCheck } from "react-icons/fa6";
+import { mockHabits } from "../mockData/mockData";
 import { useEffect, useState } from "react";
 import type { habitOriginType, habitType } from "../helpers/entityTypes";
+import { catIconImgs } from "../helpers/iconsBank";
+import useCategoriesStore from "../stores/categoriesStore";
 
 interface PropTypes {
   habit: habitType;
@@ -19,29 +12,26 @@ interface PropTypes {
 
 function HabitHomeCard({ habit, handleComplete }: PropTypes) {
   // variables
-  const [category, setCategory] = useState({
-    id: "1",
-    name: "Physical health",
-    icon: "physical",
-  });
   const [currentHabit, setCurrentHabit] = useState<habitOriginType>();
+  const [catIcon, setCatIcon] = useState<React.ReactNode>();
 
-  const catIconImgs = [
-    { name: "physical", icon: <FaBaseball /> },
-    { name: "mental", icon: <FaBrain /> },
-    { name: "work", icon: <FaBusinessTime /> },
-    { name: "learn", icon: <FaBookOpen /> },
-    { name: "finance", icon: <FaBuildingColumns /> },
-    { name: "household", icon: <FaHouseChimney /> },
-  ];
-
+  // runs when habit changes
   useEffect(() => {
     let cHabit = mockHabits.find((item) => item.id == habit.habitId);
 
     if (cHabit) {
+      // set habit
       setCurrentHabit(cHabit);
-      let cat = categories.find((item) => item.id == cHabit.category);
-      cat && setCategory(cat);
+      let cat = useCategoriesStore.getState().getCategoryById(cHabit.category);
+
+      if (cat) {
+        // set category icon
+        catIconImgs.map((catIcon) => {
+          if (catIcon.name == cat.icon) {
+            setCatIcon(catIcon.icon);
+          }
+        });
+      }
     }
   }, [habit]);
 
@@ -51,18 +41,7 @@ function HabitHomeCard({ habit, handleComplete }: PropTypes) {
     >
       <div className="flex justify-start align-center">
         <div className="text-lg">
-          {catIconImgs.map((catIcon) => {
-            if (catIcon.name == category.icon) {
-              return (
-                <p
-                  className="px-2 pt-2 text-purple-950 shadow-md hover:shadow-lg"
-                  key={catIcon.name}
-                >
-                  {catIcon.icon}
-                </p>
-              );
-            }
-          })}
+          <p className="px-2 pt-2 text-purple-950">{catIcon}</p>
         </div>
         <p className="text-lg px-2 capitalize pt-0.5 text-purple-950">
           {currentHabit?.name}

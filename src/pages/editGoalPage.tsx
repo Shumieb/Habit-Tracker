@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import type { categoryType, frequencyType } from "../helpers/entityTypes";
-import { categories, mockFrequency, mockHabits } from "../mockData/mockData";
+import { mockFrequency, mockHabits } from "../mockData/mockData";
 import { Link, useNavigate, useParams } from "react-router";
 import { catIconImgs, freqIconImgs } from "../helpers/iconsBank";
+import useCategoriesStore from "../stores/categoriesStore";
 
 function EditGoalPage() {
   // variables
@@ -12,9 +13,8 @@ function EditGoalPage() {
   const [dayOfWeek, setDayOfWeek] = useState<string | undefined>();
   const [dateOfMonth, setDateOfMonth] = useState<number | undefined>();
   const [errors, setErrors] = useState<string[]>([]);
+  const [categoriesData, setCategoriesData] = useState<categoryType[]>();
 
-  const [categoriesData, setCategoriesData] =
-    useState<categoryType[]>(categories);
   const [frequencies, setFrequencies] =
     useState<frequencyType[]>(mockFrequency);
 
@@ -29,8 +29,10 @@ function EditGoalPage() {
   ];
 
   const navigate = useNavigate();
-
   const param = useParams();
+
+  // store
+  const categories = useCategoriesStore.getState().initializeCategories();
 
   // runs when component mounts
   useEffect(() => {
@@ -48,6 +50,12 @@ function EditGoalPage() {
       if (foundHabit.frequency == "3") {
         setDateOfMonth(Number(foundHabit.date));
       }
+    }
+
+    // set categories
+    let cats = useCategoriesStore.getState().categories;
+    if (cats.length > 0) {
+      setCategoriesData(cats);
     }
   }, []);
 
@@ -144,32 +152,33 @@ function EditGoalPage() {
         <div className="py-2 px-2">
           <label className="text-lg px-2 block">Category:</label>
           <div className="grid grid-cols-3 gap-2 px-2 py-2">
-            {categoriesData.map((item) => {
-              return (
-                <div
-                  key={item.id}
-                  className={`flex flex-col justify-center align-center border-2 border-purple-950 py-2 px-6 text-lg mx-2 shadow-md hover:shadow-lg rounded-md cursor-pointer ${item.id == categoryId ? "bg-purple-950 text-white" : "bg-white text-purple-950"}`}
-                  onClick={() => {
-                    setCategoryId(item.id);
-                    resetErrors();
-                  }}
-                >
-                  {catIconImgs.map((icon) => {
-                    if (icon.name == item.icon) {
-                      return (
-                        <div
-                          key={icon.name}
-                          className="flex justify-center text-2xl"
-                        >
-                          {icon.icon}
-                        </div>
-                      );
-                    }
-                  })}
-                  <p className="capitalize text-center">{item.name}</p>
-                </div>
-              );
-            })}
+            {categoriesData &&
+              categoriesData.map((item) => {
+                return (
+                  <div
+                    key={item.id}
+                    className={`flex flex-col justify-center align-center border-2 border-purple-950 py-2 px-6 text-lg mx-2 shadow-md hover:shadow-lg rounded-md cursor-pointer ${item.id == categoryId ? "bg-purple-950 text-white" : "bg-white text-purple-950"}`}
+                    onClick={() => {
+                      setCategoryId(item.id);
+                      resetErrors();
+                    }}
+                  >
+                    {catIconImgs.map((icon) => {
+                      if (icon.name == item.icon) {
+                        return (
+                          <div
+                            key={icon.name}
+                            className="flex justify-center text-2xl"
+                          >
+                            {icon.icon}
+                          </div>
+                        );
+                      }
+                    })}
+                    <p className="capitalize text-center">{item.name}</p>
+                  </div>
+                );
+              })}
           </div>
         </div>
 

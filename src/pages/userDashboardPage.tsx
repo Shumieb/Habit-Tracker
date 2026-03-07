@@ -3,6 +3,7 @@ import type { habitOriginType } from "../helpers/entityTypes";
 import { mockHabits } from "../mockData/mockData";
 import HabitDashCard from "../components/habitDashCard";
 import { Link } from "react-router";
+import useCategoriesStore from "../stores/categoriesStore";
 
 function UserDashboardPage() {
   // variables
@@ -17,6 +18,9 @@ function UserDashboardPage() {
     month: "long",
     year: "numeric",
   });
+
+  // store
+  const categories = useCategoriesStore.getState().initializeCategories();
 
   return (
     <section className="w-[90%] mx-auto py-2 px-2">
