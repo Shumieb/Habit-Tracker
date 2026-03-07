@@ -4,6 +4,7 @@ import { mockHabits } from "../mockData/mockData";
 import HabitDashCard from "../components/habitDashCard";
 import { Link } from "react-router";
 import useCategoriesStore from "../stores/categoriesStore";
+import useFrequenciesStore from "../stores/frequenciesStore";
 
 function UserDashboardPage() {
   // variables
@@ -21,6 +22,7 @@ function UserDashboardPage() {
 
   // store
   const categories = useCategoriesStore.getState().initializeCategories();
+  const frequencies = useFrequenciesStore.getState().initializeFrequencies();
 
   return (
     <section className="w-[90%] mx-auto py-2 px-2">

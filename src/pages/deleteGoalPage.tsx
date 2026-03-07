@@ -1,11 +1,9 @@
 import { useEffect, useState } from "react";
-import type {
-  categoryType,
-  frequencyType,
-  habitOriginType,
-} from "../helpers/entityTypes";
-import { categories, mockFrequency, mockHabits } from "../mockData/mockData";
+import type { habitOriginType } from "../helpers/entityTypes";
+import { mockHabits } from "../mockData/mockData";
 import { useNavigate, useParams } from "react-router";
+import useCategoriesStore from "../stores/categoriesStore";
+import useFrequenciesStore from "../stores/frequenciesStore";
 
 function DeleteGoalPage() {
   // variables
@@ -13,11 +11,6 @@ function DeleteGoalPage() {
   const [categoryName, setCategoryName] = useState<string>();
   const [frequencyName, setFrequencyName] = useState<string>();
   const [dayOfWeek, setDayofWeek] = useState<string>();
-
-  const [categoriesData, setCategoriesData] =
-    useState<categoryType[]>(categories);
-  const [frequencies, setFrequencies] =
-    useState<frequencyType[]>(mockFrequency);
 
   const weekDays = [
     { id: 0, day: "Sunday" },
@@ -30,8 +23,11 @@ function DeleteGoalPage() {
   ];
 
   const navigate = useNavigate();
-
   const param = useParams();
+
+  // store
+  const categories = useCategoriesStore.getState().initializeCategories();
+  const frequencies = useFrequenciesStore.getState().initializeFrequencies();
 
   // runs when component mounts
   useEffect(() => {
@@ -45,18 +41,18 @@ function DeleteGoalPage() {
   // runs when habit changes
   useEffect(() => {
     // set category
-    categoriesData.map((item) => {
-      if (item.id == habit?.category) {
-        setCategoryName(item.name);
-      }
-    });
+    if (habit) {
+      let cat = useCategoriesStore.getState().getCategoryById(habit.category);
+      cat && setCategoryName(cat.name);
+    }
 
     // set frequency
-    frequencies.map((item) => {
-      if (item.id == habit?.frequency) {
-        setFrequencyName(item.name);
-      }
-    });
+    if (habit) {
+      let freq = useFrequenciesStore
+        .getState()
+        .getFrequencyById(habit.frequency);
+      freq && setFrequencyName(freq.name);
+    }
 
     // set week day
     weekDays.map((day) => {

@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import type { categoryType, frequencyType } from "../helpers/entityTypes";
-import { mockFrequency, mockHabits } from "../mockData/mockData";
+import { mockHabits } from "../mockData/mockData";
 import { Link, useNavigate, useParams } from "react-router";
 import { catIconImgs, freqIconImgs } from "../helpers/iconsBank";
 import useCategoriesStore from "../stores/categoriesStore";
+import useFrequenciesStore from "../stores/frequenciesStore";
 
 function EditGoalPage() {
   // variables
@@ -14,9 +15,7 @@ function EditGoalPage() {
   const [dateOfMonth, setDateOfMonth] = useState<number | undefined>();
   const [errors, setErrors] = useState<string[]>([]);
   const [categoriesData, setCategoriesData] = useState<categoryType[]>();
-
-  const [frequencies, setFrequencies] =
-    useState<frequencyType[]>(mockFrequency);
+  const [frequenciesData, setFrequenciesData] = useState<frequencyType[]>();
 
   const weekDays = [
     { id: 0, day: "Sunday" },
@@ -33,6 +32,7 @@ function EditGoalPage() {
 
   // store
   const categories = useCategoriesStore.getState().initializeCategories();
+  const frequencies = useFrequenciesStore.getState().initializeFrequencies();
 
   // runs when component mounts
   useEffect(() => {
@@ -57,6 +57,10 @@ function EditGoalPage() {
     if (cats.length > 0) {
       setCategoriesData(cats);
     }
+
+    // set frequencies
+    let freqs = useFrequenciesStore.getState().frequencies;
+    if (freqs.length > 0) setFrequenciesData(freqs);
   }, []);
 
   // run on form submit
@@ -186,32 +190,33 @@ function EditGoalPage() {
         <div className="py-2 px-2">
           <label className="text-lg px-2 block">Frequency:</label>
           <div className="grid grid-cols-3 gap-2 px-2 py-2">
-            {frequencies.map((item) => {
-              return (
-                <div
-                  key={item.id}
-                  className={`border-2 border-purple-950 py-2 px-6 text-lg mx-2 shadow-md hover:shadow-lg rounded-md cursor-pointer ${item.id == frequencyId ? "bg-purple-950 text-white" : "bg-white text-purple-950"}`}
-                  onClick={() => {
-                    setFrequencyId(item.id);
-                    resetErrors();
-                  }}
-                >
-                  {freqIconImgs.map((icon) => {
-                    if (icon.name == item.name) {
-                      return (
-                        <div
-                          key={icon.name}
-                          className="flex justify-center text-2xl"
-                        >
-                          {icon.icon}
-                        </div>
-                      );
-                    }
-                  })}
-                  <p className="capitalize text-center">{item.name}</p>
-                </div>
-              );
-            })}
+            {frequenciesData &&
+              frequenciesData.map((item) => {
+                return (
+                  <div
+                    key={item.id}
+                    className={`border-2 border-purple-950 py-2 px-6 text-lg mx-2 shadow-md hover:shadow-lg rounded-md cursor-pointer ${item.id == frequencyId ? "bg-purple-950 text-white" : "bg-white text-purple-950"}`}
+                    onClick={() => {
+                      setFrequencyId(item.id);
+                      resetErrors();
+                    }}
+                  >
+                    {freqIconImgs.map((icon) => {
+                      if (icon.name == item.name) {
+                        return (
+                          <div
+                            key={icon.name}
+                            className="flex justify-center text-2xl"
+                          >
+                            {icon.icon}
+                          </div>
+                        );
+                      }
+                    })}
+                    <p className="capitalize text-center">{item.name}</p>
+                  </div>
+                );
+              })}
           </div>
         </div>
 

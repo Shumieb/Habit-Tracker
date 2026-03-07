@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import type { habitOriginType } from "../helpers/entityTypes";
 import { FaPenToSquare, FaTrashCan } from "react-icons/fa6";
-import { mockFrequency } from "../mockData/mockData";
 import { setDay } from "../helpers/helperFunctions";
 import { Link } from "react-router";
 import { catIconImgs, freqIconImgs } from "../helpers/iconsBank";
 import useCategoriesStore from "../stores/categoriesStore";
+import useFrequenciesStore from "../stores/frequenciesStore";
 
 interface PropTypes {
   habit: habitOriginType;
@@ -16,9 +16,12 @@ function HabitDashCard({ habit }: PropTypes) {
   const [dayOfWeek, setDayOfWeek] = useState("");
   const [catIcon, setCatIcon] = useState<React.ReactNode>();
   const [catName, setCatName] = useState<string>();
+  const [freqIcon, setFreqIcon] = useState<React.ReactNode>();
+  const [freqName, setFreqName] = useState<string>();
 
   // run when component first renders
   useEffect(() => {
+    // set day of week
     if (habit.frequency == "2") {
       let weekDay = setDay(Number(habit.frequency));
       weekDay && setDayOfWeek(weekDay);
@@ -30,10 +33,22 @@ function HabitDashCard({ habit }: PropTypes) {
 
     //set category icon
     if (cat) {
-      // set category icon
       catIconImgs.map((catIcon) => {
         if (catIcon.name == cat.icon) {
           setCatIcon(catIcon.icon);
+        }
+      });
+    }
+
+    // set frequency name
+    let freq = useFrequenciesStore.getState().getFrequencyById(habit.frequency);
+    freq && setFreqName(freq.name);
+
+    //set frequency icon
+    if (freq) {
+      freqIconImgs.map((freqIcon) => {
+        if (freqIcon.name == freq.name) {
+          setFreqIcon(freqIcon.icon);
         }
       });
     }
@@ -61,34 +76,14 @@ function HabitDashCard({ habit }: PropTypes) {
         </div>
 
         {/* display frequency */}
-        {mockFrequency.map((freq) => {
-          if (freq.id == habit.frequency) {
-            return (
-              <div className="flex justify-center align-center" key={freq.id}>
-                <div className="text-lg">
-                  {freqIconImgs.map((freqIcon) => {
-                    if (freqIcon.name == freq.name) {
-                      return (
-                        <p
-                          className="px-1 pt-2 text-gray-600"
-                          key={freqIcon.name}
-                        >
-                          {freqIcon.icon}
-                        </p>
-                      );
-                    }
-                  })}
-                </div>
-                <p
-                  className="text-lg px-2 text-gray-600 pt-0.5 italic"
-                  key={freq.id}
-                >
-                  Frequency - {freq.name}
-                </p>
-              </div>
-            );
-          }
-        })}
+        <div className="flex justify-center align-center">
+          <div className="text-lg">
+            <p className="px-1 pt-2 text-gray-600">{freqIcon}</p>
+          </div>
+          <p className="text-lg px-2 text-gray-600 pt-0.5 italic">
+            Frequency - {freqName}
+          </p>
+        </div>
 
         {/* display day if weekly */}
         {habit.frequency == "2" && (
