@@ -2,7 +2,7 @@ import { NavLink } from "react-router";
 
 function NavBar() {
   return (
-    <nav className="mb-2 w-[90%] mx-auto py-2">
+    <nav className="mb-2 w-[90%] mx-auto py-2 text-purple-950">
       <div className="flex justify-between content-center w-[100%] px-2">
         <NavLink className="text-xl py-2" to="/">
           Habit Tracker

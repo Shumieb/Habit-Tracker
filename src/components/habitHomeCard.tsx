@@ -47,33 +47,38 @@ function HabitHomeCard({ habit, handleComplete }: PropTypes) {
 
   return (
     <div
-      className={`flex justify-between align-center border-2 rounded py-2 px-2 mb-4 shadow-md ${habit.completed ? "border-green-900 line-through" : "border-rose-950"}`}
+      className={`flex justify-between align-center border-2 rounded py-2 px-2 mb-4 shadow-md hover:shadow-lg ${habit.completed ? "border-green-900 line-through" : "border-purple-950"}`}
     >
       <div className="flex justify-start align-center">
         <div className="text-lg">
           {catIconImgs.map((catIcon) => {
             if (catIcon.name == category.icon) {
               return (
-                <p className="px-2 pt-2" key={catIcon.name}>
+                <p
+                  className="px-2 pt-2 text-purple-950 shadow-md hover:shadow-lg"
+                  key={catIcon.name}
+                >
                   {catIcon.icon}
                 </p>
               );
             }
           })}
         </div>
-        <p className="text-lg px-2 capitalize pt-0.5">{currentHabit?.name}</p>
+        <p className="text-lg px-2 capitalize pt-0.5 text-purple-950">
+          {currentHabit?.name}
+        </p>
       </div>
       <div>
         {habit.completed ? (
           <button
-            className="cursor-pointer text-xl pt-1.5"
+            className="cursor-pointer text-xl pt-1.5 text-purple-950"
             onClick={() => handleComplete(habit.id)}
           >
             <FaRegCircleCheck />
           </button>
         ) : (
           <button
-            className="cursor-pointer text-xl pt-1.5"
+            className="cursor-pointer text-xl pt-1.5 text-purple-950"
             onClick={() => handleComplete(habit.id)}
           >
             <FaRegCircle />

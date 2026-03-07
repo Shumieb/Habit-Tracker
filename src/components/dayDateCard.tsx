@@ -40,11 +40,19 @@ function DayDateCard({ day, toggleDates, selectedDay }: PropTypes) {
 
   return (
     <div
-      className={`border-2 border-purple-900 rounded-lg py-2 px-4 min-w-[12%] text-center my-2 ${currentday ? "bg-purple-950 text-white" : futureDay ? "bg-gray-300" : "bg-white text-gray-950"} ${futureDay ? "cursor-not-allowed" : "cursor-pointer"}`}
+      className={`border-2 border-purple-900 rounded-lg py-2 px-4 min-w-[12%] text-center my-2 ${currentday ? "bg-purple-950" : futureDay ? "bg-gray-300" : "bg-white"} ${futureDay ? "cursor-not-allowed" : "cursor-pointer"}`}
       onClick={handleClick}
     >
-      <p className="text-lg">{day.date}</p>
-      <p className="text-lg">{day.dayTxt}</p>
+      <p
+        className={`text-lg ${currentday ? "text-white" : futureDay ? "text-gray-950" : "text-purple-950"}`}
+      >
+        {day.date}
+      </p>
+      <p
+        className={`text-lg ${currentday ? "text-white" : futureDay ? "text-gray-950" : "text-purple-950"}`}
+      >
+        {day.dayTxt}
+      </p>
     </div>
   );
 }

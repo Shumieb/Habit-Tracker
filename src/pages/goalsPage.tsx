@@ -90,9 +90,11 @@ function GoalsPage() {
 
   return (
     <section className="w-[90%] mx-auto py-2">
-      <h1 className="text-xl px-2 py-1 text-center">Hello, {userName}!</h1>
+      <h1 className="text-xl px-2 py-1 text-center text-purple-950">
+        Hello, {userName}!
+      </h1>
 
-      <h2 className="text-xl px-2 py-1 text-center">
+      <h2 className="text-xl px-2 py-1 text-center text-purple-950">
         Today is {formattedDate}
       </h2>
 
@@ -114,7 +116,7 @@ function GoalsPage() {
       {/* habits */}
       <div className="px-2 py-2">
         {dailyHabits?.length == 0 && (
-          <p className="text-center py-2 px-2 text-xl mt-3">
+          <p className="text-center py-2 px-2 text-xl mt-3 text-purple-950">
             No Habits for today
           </p>
         )}

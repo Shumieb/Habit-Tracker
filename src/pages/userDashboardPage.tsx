@@ -20,14 +20,18 @@ function UserDashboardPage() {
 
   return (
     <section className="w-[90%] mx-auto py-2 px-2">
-      <h1 className="text-xl px-2 py-1 text-center">Hello, {userName}!</h1>
+      <h1 className="text-xl px-2 py-1 text-center text-purple-950">
+        Hello, {userName}!
+      </h1>
 
-      <h2 className="text-xl px-2 py-1 text-center">
+      <h2 className="text-xl px-2 py-1 text-center text-purple-950">
         Today is {formattedDate}
       </h2>
 
       <div className="flex justify-between align-center">
-        <h2 className="text-2xl px-2 py-2 underline">My Goals</h2>
+        <h2 className="text-2xl px-2 py-2 underline text-purple-950">
+          My Goals
+        </h2>
         <Link
           to="/add-new-goal"
           className="border-2 text-lg rounded-md py-2 px-4 cursor-pointer shadow-md border-purple-950 bg-purple-950 text-white"
@@ -36,7 +40,7 @@ function UserDashboardPage() {
         </Link>
       </div>
 
-      <div className="mt-2 py-2">
+      <div className="mt-2 py-2 grid grid-cols-2 gap-5">
         {habits.map((item) => {
           return <HabitDashCard habit={item} key={item.id} />;
         })}

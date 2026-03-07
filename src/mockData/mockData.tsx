@@ -1,26 +1,26 @@
-export const categories = [
+import type {
+  categoryType,
+  frequencyType,
+  habitOriginType,
+  habitType,
+} from "../helpers/entityTypes";
+
+export const categories: categoryType[] = [
   { id: "1", name: "Physical health", icon: "physical" },
   { id: "2", name: "Mental & Emotional Health", icon: "mental" },
   { id: "3", name: "Productivity & Work", icon: "work" },
-  { id: "4", name: "Self-Improvement/Learning", icon: "learn" },
+  { id: "4", name: "Self Improvement", icon: "learn" },
   { id: "5", name: "Financial Habits", icon: "finance" },
-  { id: "6", name: "Environmental/Household:", icon: "household" },
+  { id: "6", name: "Household", icon: "household" },
 ];
 
-export const mockFrequency = [
+export const mockFrequency: frequencyType[] = [
   { id: "1", name: "daily" },
   { id: "2", name: "weekly" },
   { id: "3", name: "monthly" },
 ];
 
-export const mockHabits: {
-  id: string;
-  name: string;
-  category: string;
-  frequency: string;
-  day: string | undefined;
-  date: string | undefined;
-}[] = [
+export const mockHabits: habitOriginType[] = [
   {
     id: "1",
     name: "30 minutes of daily exercise",
@@ -79,15 +79,7 @@ export const mockHabits: {
   },
 ];
 
-export const mockHabitsHistory: {
-  id: string;
-  date: number;
-  day: number;
-  month: number;
-  year: number;
-  habitId: string;
-  completed: boolean;
-}[] = [
+export const mockHabitsHistory: habitType[] = [
   {
     id: "1",
     date: 4,
