@@ -5,6 +5,7 @@ import useCategoriesStore from "../stores/categoriesStore";
 import useFrequenciesStore from "../stores/frequenciesStore";
 import { weekDays } from "../helpers/staticData";
 import useGoalsStore from "../stores/goalsStore";
+import { catIconImgs, freqIconImgs } from "../helpers/iconsBank";
 
 function DeleteGoalPage() {
   // variables
@@ -12,6 +13,8 @@ function DeleteGoalPage() {
   const [categoryName, setCategoryName] = useState<string>();
   const [frequencyName, setFrequencyName] = useState<string>();
   const [dayOfWeek, setDayofWeek] = useState<string>();
+  const [catIcon, setCatIcon] = useState<React.ReactNode>();
+  const [freqIcon, setFreqIcon] = useState<React.ReactNode>();
 
   const navigate = useNavigate();
   const param = useParams();
@@ -24,10 +27,29 @@ function DeleteGoalPage() {
   useEffect(() => {
     if (!param.id) return;
 
+    // find habit to delete
     let foundHabit = useGoalsStore.getState().getGoalById(param.id);
 
     if (foundHabit) {
       setHabit(foundHabit);
+
+      // set category icon
+      let cat = useCategoriesStore
+        .getState()
+        .getCategoryById(foundHabit.category);
+      if (cat) {
+        let icon = catIconImgs.find((icon) => icon.name == cat.icon);
+        icon && setCatIcon(icon.icon);
+      }
+
+      // set category icon
+      let freq = useFrequenciesStore
+        .getState()
+        .getFrequencyById(foundHabit.frequency);
+      if (freq) {
+        let icon = freqIconImgs.find((icon) => icon.name == freq.name);
+        icon && setFreqIcon(icon.icon);
+      }
     }
   }, []);
 
@@ -85,14 +107,20 @@ function DeleteGoalPage() {
       </p>
 
       {/* category */}
-      <p className="capitalize text-lg py-0.5 px-2">
-        <b>Category:</b> {categoryName}
-      </p>
+      <div className="flex justify-center align-center py-0.5 px-2">
+        <p className="text-lg pt-1.5">{catIcon}</p>
+        <p className="capitalize text-lg ms-2">
+          <b>Category:</b> {categoryName}
+        </p>
+      </div>
 
       {/* frequency */}
-      <p className="capitalize text-lg py-0.5 px-2">
-        <b>Frequency:</b> {frequencyName}
-      </p>
+      <div className="flex justify-center align-center py-0.5 px-2">
+        <p className="text-lg pt-1.5">{freqIcon}</p>
+        <p className="capitalize text-lg ms-2">
+          <b>Frequency:</b> {frequencyName}
+        </p>
+      </div>
 
       {/* display day if weekly */}
       {habit?.frequency == "2" && (
