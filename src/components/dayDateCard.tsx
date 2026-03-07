@@ -1,31 +1,25 @@
 import { useEffect, useState } from "react";
+import type { dayDictType, selectedDayType } from "../helpers/entityTypes";
 
 interface PropTypes {
-  day: {
-    dayTxt: string;
-    day: number;
-    date: string;
-    month: number;
-    year: number;
-  };
-  toggleDates: (day: {
-    dayTxt: string;
-    date: string;
-    month: number;
-    year: number;
-    day: number;
-  }) => void;
-  selectedDay: {
-    date: number;
-    day: number;
-    year: number;
-  };
+  day: dayDictType;
+  toggleDates: (day: dayDictType) => void;
+  selectedDay: selectedDayType;
 }
 
 function DayDateCard({ day, toggleDates, selectedDay }: PropTypes) {
   // variables
   const [currentday, setCurrentDay] = useState(false);
   const [futureDay, setFutureDay] = useState(false);
+
+  useEffect(() => {
+    const today = new Date();
+    if (today.getDay() < day.day) {
+      setFutureDay(true);
+    } else {
+      setFutureDay(false);
+    }
+  }, [day]);
 
   useEffect(() => {
     if (
@@ -39,10 +33,15 @@ function DayDateCard({ day, toggleDates, selectedDay }: PropTypes) {
     }
   }, [selectedDay]);
 
+  const handleClick = () => {
+    if (futureDay) return;
+    toggleDates(day);
+  };
+
   return (
     <div
-      className={`border-2 border-purple-900 rounded-lg py-2 px-4 min-w-[12%] cursor-pointer text-center my-2 ${currentday ? "bg-purple-950 text-white" : "bg-white text-gray-950"}`}
-      onClick={() => toggleDates(day)}
+      className={`border-2 border-purple-900 rounded-lg py-2 px-4 min-w-[12%] text-center my-2 ${currentday ? "bg-purple-950 text-white" : futureDay ? "bg-gray-300" : "bg-white text-gray-950"} ${futureDay ? "cursor-not-allowed" : "cursor-pointer"}`}
+      onClick={handleClick}
     >
       <p className="text-lg">{day.date}</p>
       <p className="text-lg">{day.dayTxt}</p>

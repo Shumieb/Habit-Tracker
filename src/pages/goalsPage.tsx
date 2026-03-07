@@ -3,22 +3,11 @@ import DayDateCard from "../components/dayDateCard";
 import { setDatesToDisplay } from "../helpers/helperFunctions";
 import HabitHomeCard from "../components/habitHomeCard";
 import { mockHabitsHistory } from "../mockData/mockData";
-
-interface habitType {
-  id: string;
-  date: number;
-  day: number;
-  month: number;
-  year: number;
-  habitId: string;
-  completed: boolean;
-}
-
-interface selectedDayType {
-  date: number;
-  day: number;
-  year: number;
-}
+import type {
+  dayDictType,
+  habitType,
+  selectedDayType,
+} from "../helpers/entityTypes";
 
 function GoalsPage() {
   // variables
@@ -40,8 +29,17 @@ function GoalsPage() {
     { dayTxt: "Sat", day: 6, date: "2", month: 3, year: 2026 },
   ]);
 
+  // get today's date
+  const today = new Date();
+  const formattedDate = today.toLocaleDateString("en-GB", {
+    weekday: "long",
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  });
+
+  // runs when the component first mounts
   useEffect(() => {
-    const today = new Date();
     // set dates to display
     let displayDays = setDatesToDisplay(today.getDay(), today.getDate());
     displayDays && setDaysToDisplay(displayDays);
@@ -65,6 +63,7 @@ function GoalsPage() {
     setSelectedDay(selDay);
   }, []);
 
+  // called to mark a goal as complete
   const handleComplete = (id: string) => {
     // find and update habit complete status
     const copyDailyHabits: habitType[] = [...(dailyHabits as habitType[])];
@@ -73,13 +72,8 @@ function GoalsPage() {
     setDailyHabits(copyDailyHabits);
   };
 
-  const toggleDates = (day: {
-    dayTxt: string;
-    date: string;
-    month: number;
-    year: number;
-    day: number;
-  }) => {
+  // called to change the date/day
+  const toggleDates = (day: dayDictType) => {
     // set habits to display
     let displayHabits = mockHabitsHistory.filter(
       (item) =>
@@ -96,12 +90,14 @@ function GoalsPage() {
 
   return (
     <section className="w-[90%] mx-auto py-2">
-      <h1 className="text-xl px-2 py-1">Hello, {userName}!</h1>
+      <h1 className="text-xl px-2 py-1 text-center">Hello, {userName}!</h1>
 
-      <h2 className="text-lg px-2 py-1">Your Habits</h2>
+      <h2 className="text-xl px-2 py-1 text-center">
+        Today is {formattedDate}
+      </h2>
 
       {/* display dates */}
-      <div className="flex justify-between items-center px-2">
+      <div className="flex justify-between items-center px-2 mt-2">
         {daysToDisplay &&
           daysToDisplay.map((day) => {
             return (

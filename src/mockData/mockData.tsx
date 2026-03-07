@@ -3,11 +3,11 @@ export const categories = [
   { id: "2", name: "Mental & Emotional Health", icon: "mental" },
   { id: "3", name: "Productivity & Work", icon: "work" },
   { id: "4", name: "Self-Improvement/Learning", icon: "learn" },
-  { id: "5", name: "Financial Habits:", icon: "finance" },
+  { id: "5", name: "Financial Habits", icon: "finance" },
   { id: "6", name: "Environmental/Household:", icon: "household" },
 ];
 
-export const frequency = [
+export const mockFrequency = [
   { id: "1", name: "daily" },
   { id: "2", name: "weekly" },
   { id: "3", name: "monthly" },
@@ -200,6 +200,33 @@ export const mockHabitsHistory: {
     id: "13",
     date: 6,
     day: 5,
+    month: 3,
+    year: 2026,
+    habitId: "7",
+    completed: true,
+  },
+  {
+    id: "14",
+    date: 7,
+    day: 6,
+    month: 3,
+    year: 2026,
+    habitId: "2",
+    completed: true,
+  },
+  {
+    id: "15",
+    date: 7,
+    day: 6,
+    month: 3,
+    year: 2026,
+    habitId: "5",
+    completed: true,
+  },
+  {
+    id: "16",
+    date: 7,
+    day: 6,
     month: 3,
     year: 2026,
     habitId: "7",
