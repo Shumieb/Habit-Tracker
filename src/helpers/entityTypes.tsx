@@ -24,6 +24,7 @@ export interface habitOriginType {
   frequency: string;
   day: string | undefined;
   date: string | undefined;
+  active: boolean;
 }
 
 export interface habitType {

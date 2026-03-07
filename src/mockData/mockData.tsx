@@ -28,6 +28,7 @@ export const mockHabits: habitOriginType[] = [
     frequency: "1",
     day: "",
     date: "",
+    active: true,
   },
   {
     id: "2",
@@ -36,6 +37,7 @@ export const mockHabits: habitOriginType[] = [
     frequency: "1",
     day: "",
     date: "",
+    active: true,
   },
   {
     id: "3",
@@ -44,6 +46,7 @@ export const mockHabits: habitOriginType[] = [
     frequency: "2",
     day: "3",
     date: "",
+    active: true,
   },
   {
     id: "4",
@@ -52,6 +55,7 @@ export const mockHabits: habitOriginType[] = [
     frequency: "2",
     day: "2",
     date: "",
+    active: true,
   },
   {
     id: "5",
@@ -60,6 +64,7 @@ export const mockHabits: habitOriginType[] = [
     frequency: "1",
     day: "",
     date: "",
+    active: true,
   },
   {
     id: "6",
@@ -68,6 +73,7 @@ export const mockHabits: habitOriginType[] = [
     frequency: "3",
     date: "20",
     day: "",
+    active: true,
   },
   {
     id: "7",
@@ -76,6 +82,7 @@ export const mockHabits: habitOriginType[] = [
     frequency: "2",
     day: "3",
     date: "",
+    active: true,
   },
 ];
 

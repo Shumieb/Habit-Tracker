@@ -2,7 +2,7 @@ import { useState } from "react";
 import type { categoryType, frequencyType } from "../helpers/entityTypes";
 import { categories, mockFrequency, mockHabits } from "../mockData/mockData";
 import { catIconImgs, freqIconImgs } from "../helpers/iconsBank";
-import { useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router";
 
 function AddNewGoalPage() {
   // variables
@@ -79,6 +79,7 @@ function AddNewGoalPage() {
       frequency: frequencyId,
       day: newDay,
       date: newDate,
+      active: true,
     };
 
     // TODO: Add new goal to array
@@ -240,8 +241,14 @@ function AddNewGoalPage() {
           <input
             type="submit"
             value="Add Goal"
-            className="bg-purple-950 text-white text-lg py-2 px-4 rounded-md w-[98%] cursor-pointer"
+            className="bg-purple-950 text-white text-lg py-2 px-4 rounded-md w-[46%] me-2 cursor-pointer"
           />
+          <Link
+            to="/user-dashboard/1"
+            className="bg-gray-600 text-white text-lg py-2 px-4 rounded-md cursor-pointer ms-2 w-[46%] text-center"
+          >
+            Cancel
+          </Link>
         </div>
       </form>
     </section>

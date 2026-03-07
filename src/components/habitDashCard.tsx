@@ -29,7 +29,7 @@ function HabitDashCard({ habit }: PropTypes) {
       }
     >
       <div>
-        <p className="text-xl px-2 capitalize pt-0.5 text-purple-950">
+        <p className="text-xl px-2 capitalize pt-0.5 text-purple-950 font-bold">
           {habit.name}
         </p>
 

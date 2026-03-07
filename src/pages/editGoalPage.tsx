@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import type { categoryType, frequencyType } from "../helpers/entityTypes";
 import { categories, mockFrequency, mockHabits } from "../mockData/mockData";
-import { useNavigate, useParams } from "react-router";
+import { Link, useNavigate, useParams } from "react-router";
 import { catIconImgs, freqIconImgs } from "../helpers/iconsBank";
 
 function EditGoalPage() {
@@ -98,6 +98,7 @@ function EditGoalPage() {
       frequency: frequencyId,
       day: newDay,
       date: newDate,
+      active: true,
     };
 
     // TODO: Add updated goal to array
@@ -261,8 +262,14 @@ function EditGoalPage() {
           <input
             type="submit"
             value="Edit Goal"
-            className="bg-purple-950 text-white text-lg py-2 px-4 rounded-md w-[98%] cursor-pointer"
+            className="bg-purple-950 text-white text-lg py-2 px-4 rounded-md cursor-pointer me-2 w-[46%]"
           />
+          <Link
+            to="/user-dashboard/1"
+            className="bg-gray-600 text-white text-lg py-2 px-4 rounded-md cursor-pointer ms-2 w-[46%] text-center"
+          >
+            Cancel
+          </Link>
         </div>
       </form>
     </section>
