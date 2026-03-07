@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
 import type { categoryType, frequencyType } from "../helpers/entityTypes";
-import { mockHabits } from "../mockData/mockData";
 import { Link, useNavigate, useParams } from "react-router";
 import { catIconImgs, freqIconImgs } from "../helpers/iconsBank";
 import useCategoriesStore from "../stores/categoriesStore";
 import useFrequenciesStore from "../stores/frequenciesStore";
+import { weekDays } from "../helpers/staticData";
+import useGoalsStore from "../stores/goalsStore";
 
 function EditGoalPage() {
   // variables
@@ -17,16 +18,6 @@ function EditGoalPage() {
   const [categoriesData, setCategoriesData] = useState<categoryType[]>();
   const [frequenciesData, setFrequenciesData] = useState<frequencyType[]>();
 
-  const weekDays = [
-    { id: 0, day: "Sunday" },
-    { id: 1, day: "Monday" },
-    { id: 2, day: "Tuesday" },
-    { id: 3, day: "Wednesday" },
-    { id: 4, day: "Thursday" },
-    { id: 5, day: "Friday" },
-    { id: 6, day: "Saturday" },
-  ];
-
   const navigate = useNavigate();
   const param = useParams();
 
@@ -36,7 +27,9 @@ function EditGoalPage() {
 
   // runs when component mounts
   useEffect(() => {
-    let foundHabit = mockHabits.find((item) => item.id == param.id?.toString());
+    if (!param.id) return;
+
+    let foundHabit = useGoalsStore.getState().getGoalById(param.id);
 
     if (foundHabit) {
       setGoalName(foundHabit.name);
@@ -66,6 +59,8 @@ function EditGoalPage() {
   // run on form submit
   const handleSubmit = (e: any) => {
     e.preventDefault();
+
+    if (!param.id) return;
 
     if (goalName.trim().length < 3) {
       setErrors([...errors, "Please enter a New Goal"]);
@@ -113,8 +108,8 @@ function EditGoalPage() {
       active: true,
     };
 
-    // TODO: Add updated goal to array
-    console.log(updatedHabit);
+    // Add updated goal to state
+    useGoalsStore.getState().updateGoal(param.id, updatedHabit);
 
     // clear state
     setErrors([]);

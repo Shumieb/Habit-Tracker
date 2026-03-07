@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import type { habitOriginType } from "../helpers/entityTypes";
-import { mockHabits } from "../mockData/mockData";
 import { useNavigate, useParams } from "react-router";
 import useCategoriesStore from "../stores/categoriesStore";
 import useFrequenciesStore from "../stores/frequenciesStore";
+import { weekDays } from "../helpers/staticData";
+import useGoalsStore from "../stores/goalsStore";
 
 function DeleteGoalPage() {
   // variables
@@ -11,16 +12,6 @@ function DeleteGoalPage() {
   const [categoryName, setCategoryName] = useState<string>();
   const [frequencyName, setFrequencyName] = useState<string>();
   const [dayOfWeek, setDayofWeek] = useState<string>();
-
-  const weekDays = [
-    { id: 0, day: "Sunday" },
-    { id: 1, day: "Monday" },
-    { id: 2, day: "Tuesday" },
-    { id: 3, day: "Wednesday" },
-    { id: 4, day: "Thursday" },
-    { id: 5, day: "Friday" },
-    { id: 6, day: "Saturday" },
-  ];
 
   const navigate = useNavigate();
   const param = useParams();
@@ -31,7 +22,9 @@ function DeleteGoalPage() {
 
   // runs when component mounts
   useEffect(() => {
-    let foundHabit = mockHabits.find((item) => item.id == param.id?.toString());
+    if (!param.id) return;
+
+    let foundHabit = useGoalsStore.getState().getGoalById(param.id);
 
     if (foundHabit) {
       setHabit(foundHabit);
@@ -64,7 +57,13 @@ function DeleteGoalPage() {
 
   // run to delete habit
   const handleDelete = () => {
-    console.log("delete", param.id);
+    if (!param.id) return;
+
+    // delete in state
+    useGoalsStore.getState().deleteGoal(param.id);
+
+    // redirect to dashboard
+    navigate("/user-dashboard/1");
   };
 
   // run to cancel delete

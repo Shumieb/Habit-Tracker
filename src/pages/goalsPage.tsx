@@ -2,33 +2,22 @@ import { useEffect, useState } from "react";
 import DayDateCard from "../components/dayDateCard";
 import { setDatesToDisplay } from "../helpers/helperFunctions";
 import HabitHomeCard from "../components/habitHomeCard";
-import { mockHabitsHistory } from "../mockData/mockData";
 import type {
   dayDictType,
+  displayDays,
   habitType,
   selectedDayType,
 } from "../helpers/entityTypes";
 import useCategoriesStore from "../stores/categoriesStore";
+import useGoalsStore from "../stores/goalsStore";
 
 function GoalsPage() {
   // variables
   const [userName, setUserName] = useState("User Name");
-  const [dailyHabits, setDailyHabits] = useState<habitType[]>();
-  const [selectedDay, setSelectedDay] = useState<selectedDayType>({
-    date: 1,
-    day: 1,
-    year: 2026,
-  });
+  const [dailyHabits, setDailyHabits] = useState<habitType[] | undefined>();
+  const [selectedDay, setSelectedDay] = useState<selectedDayType | undefined>();
 
-  const [daysToDisplay, setDaysToDisplay] = useState([
-    { dayTxt: "Sun", day: 0, date: "2", month: 3, year: 2026 },
-    { dayTxt: "Mon", day: 1, date: "2", month: 3, year: 2026 },
-    { dayTxt: "Tue", day: 2, date: "2", month: 3, year: 2026 },
-    { dayTxt: "Wed", day: 3, date: "2", month: 3, year: 2026 },
-    { dayTxt: "Thur", day: 4, date: "2", month: 3, year: 2026 },
-    { dayTxt: "Fri", day: 5, date: "2", month: 3, year: 2026 },
-    { dayTxt: "Sat", day: 6, date: "2", month: 3, year: 2026 },
-  ]);
+  const [daysToDisplay, setDaysToDisplay] = useState<displayDays[]>();
 
   // get today's date
   const today = new Date();
@@ -41,6 +30,7 @@ function GoalsPage() {
 
   // store
   const categories = useCategoriesStore.getState().initializeCategories();
+  const goalsHistoryData = useGoalsStore.getState().initializeGoalsHistory();
 
   // runs when the component first mounts
   useEffect(() => {
@@ -49,14 +39,16 @@ function GoalsPage() {
     displayDays && setDaysToDisplay(displayDays);
 
     // get todays habit only
-    let todayHabits = mockHabitsHistory.filter(
-      (item) =>
-        item.date == today.getDate() &&
-        item.day == today.getDay() &&
-        item.month == today.getMonth() + 1 &&
-        item.year == today.getFullYear(),
-    );
-    setDailyHabits(todayHabits);
+    let todayHabits = useGoalsStore
+      .getState()
+      .getGoalHistoryByDay(
+        today.getDate(),
+        today.getDay(),
+        today.getMonth() + 1,
+        today.getFullYear(),
+      );
+
+    todayHabits && setDailyHabits(todayHabits);
 
     //set selected day
     let selDay = {
@@ -79,13 +71,11 @@ function GoalsPage() {
   // called to change the date/day
   const toggleDates = (day: dayDictType) => {
     // set habits to display
-    let displayHabits = mockHabitsHistory.filter(
-      (item) =>
-        item.date == Number(day.date) &&
-        item.month == day.month &&
-        item.year == day.year,
-    );
-    setDailyHabits(displayHabits);
+    let displayHabits = useGoalsStore
+      .getState()
+      .getGoalHistoryByDay(Number(day.date), day.day, day.month, day.year);
+
+    displayHabits && setDailyHabits(displayHabits);
 
     // set selected day
     let selDay = { date: Number(day.date), day: day.day, year: day.year };

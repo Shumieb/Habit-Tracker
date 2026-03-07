@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
 import type { categoryType, frequencyType } from "../helpers/entityTypes";
-import { mockHabits } from "../mockData/mockData";
 import { catIconImgs, freqIconImgs } from "../helpers/iconsBank";
 import { Link, useNavigate } from "react-router";
 import useCategoriesStore from "../stores/categoriesStore";
 import useFrequenciesStore from "../stores/frequenciesStore";
+import { weekDays } from "../helpers/staticData";
+import useGoalsStore from "../stores/goalsStore";
 
 function AddNewGoalPage() {
   // variables
@@ -20,16 +21,6 @@ function AddNewGoalPage() {
   // store
   const categories = useCategoriesStore.getState().initializeCategories();
   const frequencies = useFrequenciesStore.getState().initializeFrequencies();
-
-  const weekDays = [
-    { id: 0, day: "Sunday" },
-    { id: 1, day: "Monday" },
-    { id: 2, day: "Tuesday" },
-    { id: 3, day: "Wednesday" },
-    { id: 4, day: "Thursday" },
-    { id: 5, day: "Friday" },
-    { id: 6, day: "Saturday" },
-  ];
 
   const navigate = useNavigate();
 
@@ -63,7 +54,7 @@ function AddNewGoalPage() {
       return;
     }
 
-    let newId = mockHabits.length + 1;
+    let newId = Math.floor(Math.random() * 1000 + 1).toString();
 
     let newDay = "";
     let newDate = "";
@@ -78,7 +69,7 @@ function AddNewGoalPage() {
     }
 
     if (frequencyId == "3") {
-      if (dateOfMonth) {
+      if (dateOfMonth && dateOfMonth > 0 && dateOfMonth <= 31) {
         newDate = dateOfMonth.toString();
       } else {
         setErrors([...errors, "Please enter a Monthly Date"]);
@@ -96,8 +87,8 @@ function AddNewGoalPage() {
       active: true,
     };
 
-    // TODO: Add new goal to array
-    console.log(newHabit);
+    // Add new goal
+    useGoalsStore.getState().addNewGoal(newHabit);
 
     // clear state
     setErrors([]);

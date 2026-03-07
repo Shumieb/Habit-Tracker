@@ -23,7 +23,7 @@ function HabitDashCard({ habit }: PropTypes) {
   useEffect(() => {
     // set day of week
     if (habit.frequency == "2") {
-      let weekDay = setDay(Number(habit.frequency));
+      let weekDay = setDay(Number(habit.day));
       weekDay && setDayOfWeek(weekDay);
     } else [setDayOfWeek("")];
 

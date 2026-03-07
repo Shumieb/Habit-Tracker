@@ -12,6 +12,14 @@ export interface dayDictType {
   day: number;
 }
 
+export interface displayDays {
+  dayTxt: string;
+  day: number;
+  date: string;
+  month: number;
+  year: number;
+}
+
 export interface frequencyType {
   id: string;
   name: string;

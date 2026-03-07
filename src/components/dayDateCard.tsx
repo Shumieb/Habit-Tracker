@@ -4,7 +4,7 @@ import type { dayDictType, selectedDayType } from "../helpers/entityTypes";
 interface PropTypes {
   day: dayDictType;
   toggleDates: (day: dayDictType) => void;
-  selectedDay: selectedDayType;
+  selectedDay: selectedDayType | undefined;
 }
 
 function DayDateCard({ day, toggleDates, selectedDay }: PropTypes) {
@@ -22,14 +22,16 @@ function DayDateCard({ day, toggleDates, selectedDay }: PropTypes) {
   }, [day]);
 
   useEffect(() => {
-    if (
-      selectedDay.date == Number(day.date) &&
-      selectedDay.day == day.day &&
-      selectedDay.year == day.year
-    ) {
-      setCurrentDay(true);
-    } else {
-      setCurrentDay(false);
+    if (selectedDay) {
+      if (
+        selectedDay.date == Number(day.date) &&
+        selectedDay.day == day.day &&
+        selectedDay.year == day.year
+      ) {
+        setCurrentDay(true);
+      } else {
+        setCurrentDay(false);
+      }
     }
   }, [selectedDay]);
 
