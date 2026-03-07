@@ -8,8 +8,6 @@ import {
   FaCalendarDay,
   FaCalendarWeek,
   FaCalendarDays,
-  FaPenToSquare,
-  FaTrashCan,
 } from "react-icons/fa6";
 
 export const catIconImgs = [

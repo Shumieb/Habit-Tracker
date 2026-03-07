@@ -2,6 +2,7 @@ import { useState } from "react";
 import type { categoryType, frequencyType } from "../helpers/entityTypes";
 import { categories, mockFrequency, mockHabits } from "../mockData/mockData";
 import { catIconImgs, freqIconImgs } from "../helpers/iconsBank";
+import { useNavigate } from "react-router";
 
 function AddNewGoalPage() {
   // variables
@@ -26,6 +27,8 @@ function AddNewGoalPage() {
     { id: 5, day: "Friday" },
     { id: 6, day: "Saturday" },
   ];
+
+  const navigate = useNavigate();
 
   // run on form submit
   const handleSubmit = (e: any) => {
@@ -78,6 +81,7 @@ function AddNewGoalPage() {
       date: newDate,
     };
 
+    // TODO: Add new goal to array
     console.log(newHabit);
 
     // clear state
@@ -87,6 +91,9 @@ function AddNewGoalPage() {
     setFrequencyId("");
     setDayOfWeek(undefined);
     setDateOfMonth(undefined);
+
+    // redirect to dashboard
+    navigate("/user-dashboard/1");
   };
 
   // reset error array
@@ -106,7 +113,7 @@ function AddNewGoalPage() {
             type="text"
             name="goal"
             placeholder="e.g journaling, take an online course"
-            className="border-b-2 py-1 px-1 outline-none w-[350px]"
+            className="border-b-2 py-1 px-1 outline-none w-[350px] capitalize text-lg"
             onChange={(e) => setGoalName(e.target.value)}
             onFocus={resetErrors}
             value={goalName}
